@@ -1,4 +1,4 @@
-﻿namespace Taksi.DTO.Models
+﻿namespace Taksi.DTO.Enums
 {
     public enum RideStatus
     {

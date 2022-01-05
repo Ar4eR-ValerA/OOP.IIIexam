@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Taksi.DTO\Taksi.DTO.csproj" />
+      <ProjectReference Include="..\Taksi.Common\Taksi.Common.csproj" />
     </ItemGroup>
 
 </Project>

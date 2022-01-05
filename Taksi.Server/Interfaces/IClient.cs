@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Taksi.DTO.Models;
+using Taksi.DTO.DTOs;
 
 namespace Taksi.Server.Interfaces
 {
