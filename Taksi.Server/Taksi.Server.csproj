@@ -5,7 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Taksi.DTO\Taksi.DTO.csproj" />
+      <ProjectReference Include="..\Taksi.Common\Taksi.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
     </ItemGroup>
 
 </Project>

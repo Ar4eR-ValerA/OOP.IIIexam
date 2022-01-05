@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taksi.Driver", "Taksi.Drive
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taksi.Server", "Taksi.Server\Taksi.Server.csproj", "{B8606224-81AC-4791-921F-329C2A635CCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taksi.DTO", "Taksi.DTO\Taksi.DTO.csproj", "{C5428013-A3D6-4B4B-8B34-FCCE90117378}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taksi.Common", "Taksi.Common\Taksi.Common.csproj", "{C5428013-A3D6-4B4B-8B34-FCCE90117378}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
