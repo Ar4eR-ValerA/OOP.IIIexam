@@ -45,7 +45,7 @@ namespace Taksi.Server.DAL.Repositories.Implementations.Ef
                     "but entity with such id is already stored in database");
             }
             
-            await DbSetContainer.AddAsync(entity);
+            DbSetContainer.Add(entity);
             SaveChanges();
         }
 
