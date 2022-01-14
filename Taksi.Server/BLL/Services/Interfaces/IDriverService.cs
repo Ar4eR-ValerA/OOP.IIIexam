@@ -19,7 +19,7 @@ namespace Taksi.Server.BLL.Services.Interfaces
         Task<double> RateDriver(Guid driverId, double score);
 
         // Driver should send it's location frequently
-        Task SetLocation(Guid driverId, Point2d newLocation);
+        Task SetLocation(Guid driverId, Point2dEntity newLocation);
         
         Task<Point2d> GetLocation(Guid driverId);
 
@@ -30,6 +30,6 @@ namespace Taksi.Server.BLL.Services.Interfaces
 
         // Look for DriverStatus == WaitingForClient,
         // Fetch id of nearest to provided location
-        Task<Guid> GetNearestToLocation(Point2d location);
+        Task<Guid> GetNearestToLocation(Point2dEntity location);
     }
 }

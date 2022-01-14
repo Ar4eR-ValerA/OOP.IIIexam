@@ -37,15 +37,10 @@ namespace Taksi.Server.BLL.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task SetLocation(Guid driverId, Point2d newLocation)
+        public async Task SetLocation(Guid driverId, Point2dEntity newLocation)
         {
             var driver = await _driverRepository.GetByIdAsync(driverId);
-            driver.Location = new Point2dEntity
-            {
-                Id = Guid.NewGuid(),
-                X = newLocation.X,
-                Y = newLocation.Y,
-            };
+            driver.Location = newLocation;
             await _driverRepository.UpdateAsync(driver);
         }
 
@@ -69,7 +64,7 @@ namespace Taksi.Server.BLL.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<Guid> GetNearestToLocation(Point2d location)
+        public Task<Guid> GetNearestToLocation(Point2dEntity location)
         {
             throw new NotImplementedException();
         }
