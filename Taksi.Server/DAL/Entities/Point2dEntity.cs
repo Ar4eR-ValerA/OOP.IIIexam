@@ -3,10 +3,11 @@ using Taksi.Server.DAL.Entities.Helpers;
 
 namespace Taksi.Server.DAL.Entities
 {
-    public class ClientEntity : IIdentifiable
+    public class Point2dEntity : IIdentifiable
     {
         public Guid Id { get; set; }
-        
-        public string FullName { get; set; }
+
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 }
