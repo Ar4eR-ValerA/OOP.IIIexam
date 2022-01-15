@@ -17,10 +17,10 @@ namespace Taksi.Server.BLL.Services.Implementations
             _clientRepository = clientRepo ?? throw new ArgumentNullException(nameof(clientRepo));
             _creditCardRepository = creditCardRepo ?? throw new ArgumentNullException(nameof(creditCardRepo));
         }
-        
-        public Task RegisterClient(ClientEntity clientEntity)
+
+        public async Task RegisterClient(ClientEntity clientEntity)
         {
-            throw new NotImplementedException();
+            await _clientRepository.InsertAsync(clientEntity);
         }
 
         public async Task UnregisterClient(Guid clientId)
@@ -28,14 +28,14 @@ namespace Taksi.Server.BLL.Services.Implementations
             await _clientRepository.RemoveAsync(clientId);
         }
 
-        public Task RegisterCreditCard(CreditCardEntity creditCardEntity)
+        public async Task RegisterCreditCard(CreditCardEntity creditCardEntity)
         {
-            throw new NotImplementedException();
+            await _creditCardRepository.InsertAsync(creditCardEntity);
         }
 
-        public Task UnregisterCreditCard(Guid creditCardId)
+        public async Task UnregisterCreditCard(Guid creditCardId)
         {
-            throw new NotImplementedException();
+            await _creditCardRepository.RemoveAsync(creditCardId);
         }
 
         public async Task<bool> HasCreditCard(Guid clientId)
@@ -44,14 +44,17 @@ namespace Taksi.Server.BLL.Services.Implementations
             return cards.Any();
         }
 
-        public Task<decimal> GetCreditCardBalance(Guid clientId)
+        public async Task<decimal> GetCreditCardBalance(Guid clientId)
         {
-            throw new NotImplementedException();
+            var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
+            return cards.Last().CardBalance;
         }
 
-        public Task SetCreditCardBalance(Guid clientId, decimal newBalance)
+        public async Task SetCreditCardBalance(Guid clientId, decimal newBalance)
         {
-            throw new NotImplementedException();
+            var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
+            cards.Last().CardBalance = newBalance;
+            await _creditCardRepository.UpdateAsync(cards.Last());
         }
     }
 }
