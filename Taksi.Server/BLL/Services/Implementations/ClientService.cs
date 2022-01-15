@@ -54,6 +54,7 @@ namespace Taksi.Server.BLL.Services.Implementations
         {
             var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             cards.Last().CardBalance = newBalance;
+            await _creditCardRepository.UpdateAsync(cards.Last());
         }
     }
 }
