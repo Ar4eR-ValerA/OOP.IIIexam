@@ -31,6 +31,10 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task<double> GetRating(Guid driverId)
         {
             var driver = await _driverRepository.GetByIdAsync(driverId);
+
+            if (driver.CountOfRatings == 0)
+                return 0;
+
             return driver.RatingSum / driver.CountOfRatings;
         }
 
