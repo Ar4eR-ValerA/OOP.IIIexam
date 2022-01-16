@@ -21,11 +21,10 @@ namespace Taksi.Server.BLL.Services.Interfaces
         // Driver should send it's location frequently
         Task SetLocation(Guid driverId, Point2dEntity newLocation);
         
-        Task<Point2d> GetLocation(Guid driverId);
+        Task<Point2dEntity> GetLocation(Guid driverId);
 
         Task SetStatus(Guid driverId, DriverStatus newStatus);
         Task<DriverStatus> GetStatus(Guid driverId);
-
         Task<TaxiType> GetTaxiType(Guid driverId);
 
         // Look for DriverStatus == WaitingForClient,
