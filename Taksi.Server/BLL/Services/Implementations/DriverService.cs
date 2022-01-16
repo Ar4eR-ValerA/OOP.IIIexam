@@ -1,40 +1,49 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Taksi.DTO.Enums;
-using Taksi.DTO.Models;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
+using Taksi.Server.DAL.Exceptions;
 using Taksi.Server.DAL.Repositories.Interfaces;
 
 namespace Taksi.Server.BLL.Services.Implementations
 {
     public class DriverService : IDriverService
     {
-        private IRepository<DriverEntity> _driverRepository;
-        
+        private readonly IRepository<DriverEntity> _driverRepository;
+
         public DriverService(IRepository<DriverEntity> driverRepo)
         {
             _driverRepository = driverRepo ?? throw new ArgumentNullException(nameof(driverRepo));
         }
-        
-        public Task RegisterDriver(DriverEntity driverEntity)
+
+        public async Task RegisterDriver(DriverEntity driverEntity)
         {
-            throw new NotImplementedException();
+            await _driverRepository.InsertAsync(driverEntity);
         }
 
-        public Task UnregisterDriver(Guid driverId)
+        public async Task UnregisterDriver(Guid driverId)
         {
-            throw new NotImplementedException();
+            await _driverRepository.RemoveAsync(driverId);
         }
 
-        public Task<double> GetRating(Guid driverId)
+        public async Task<double> GetRating(Guid driverId)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+
+            if (driver.CountOfRatings == 0)
+                return 0;
+
+            return driver.RatingSum / driver.CountOfRatings;
         }
 
-        public Task<double> RateDriver(Guid driverId, double score)
+        public async Task RateDriver(Guid driverId, double score)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+            driver.RatingSum += score;
+            driver.CountOfRatings++;
+            await _driverRepository.UpdateAsync(driver);
         }
 
         public async Task SetLocation(Guid driverId, Point2dEntity newLocation)
@@ -44,29 +53,60 @@ namespace Taksi.Server.BLL.Services.Implementations
             await _driverRepository.UpdateAsync(driver);
         }
 
-        public Task<Point2d> GetLocation(Guid driverId)
+        public async Task<Point2dEntity> GetLocation(Guid driverId)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+            return driver.Location;
         }
 
-        public Task SetStatus(Guid driverId, DriverStatus newStatus)
+        public async Task SetStatus(Guid driverId, DriverStatus newStatus)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+            driver.Status = newStatus;
+            await _driverRepository.UpdateAsync(driver);
         }
 
-        public Task<DriverStatus> GetStatus(Guid driverId)
+        public async Task<DriverStatus> GetStatus(Guid driverId)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+            return driver.Status;
         }
 
-        public Task<TaxiType> GetTaxiType(Guid driverId)
+        public async Task<TaxiType> GetTaxiType(Guid driverId)
         {
-            throw new NotImplementedException();
+            var driver = await _driverRepository.GetByIdAsync(driverId);
+            return driver.TaxiType;
         }
 
-        public Task<Guid> GetNearestToLocation(Point2dEntity location)
+        public async Task<Guid> GetNearestToLocation(Point2dEntity location)
         {
-            throw new NotImplementedException();
+            var drivers =
+                await _driverRepository.GetWhereAsync(driver => driver.Status.Equals(DriverStatus.WaitingForClient));
+            var driverEntities = drivers.ToList();
+
+            if (!driverEntities.Any())
+                return Guid.Empty;
+
+            DriverEntity nearestDriver = driverEntities.First();
+            double minDistance = CalculateDistanceBetweenPoints(location, nearestDriver.Location);
+
+            foreach (var driver in driverEntities)
+            {
+                double distance = CalculateDistanceBetweenPoints(location, driver.Location);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestDriver = driver;
+                }
+            }
+
+            return nearestDriver.Id;
+        }
+
+        private double CalculateDistanceBetweenPoints(Point2dEntity firstPoint, Point2dEntity secondPoint)
+        {
+            return Math.Sqrt(Math.Pow(secondPoint.X - firstPoint.X, 2) +
+                             Math.Pow(secondPoint.Y - firstPoint.Y, 2));
         }
     }
 }
