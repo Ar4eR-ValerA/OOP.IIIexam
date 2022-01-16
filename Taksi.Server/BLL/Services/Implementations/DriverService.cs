@@ -81,7 +81,7 @@ namespace Taksi.Server.BLL.Services.Implementations
             var driverEntities = drivers.ToList();
 
             if (!driverEntities.Any())
-                throw new EntityDoesNotExistException("No free drivers.");
+                return Guid.Empty;
 
             DriverEntity nearestDriver = driverEntities.First();
             double minDistance = CalculateDistanceBetweenPoints(location, nearestDriver.Location);
