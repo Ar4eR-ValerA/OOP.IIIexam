@@ -26,9 +26,12 @@ namespace Taksi.Server.BLL.Services.Implementations
 
         public async Task AssignDriver(Guid rideId, Guid driverId)
         {
-            var driverEntity = await _driverRepo.GetByIdAsync(driverId);
-            var rideEntity = await _rideRepo.GetByIdAsync(rideId);
+            var driverTask = _driverRepo.GetByIdAsync(driverId);
+            var rideTask = _rideRepo.GetByIdAsync(rideId);
 
+            var driverEntity = await driverTask;
+            var rideEntity = await rideTask;
+            
             if (driverEntity is null)
             {
                 throw new ArgumentException("There is no such driver");
