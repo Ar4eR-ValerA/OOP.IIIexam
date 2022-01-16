@@ -34,13 +34,12 @@ namespace Taksi.Server.BLL.Services.Implementations
             return driver.RatingSum / driver.CountOfRatings;
         }
 
-        public async Task<double> RateDriver(Guid driverId, double score)
+        public async Task RateDriver(Guid driverId, double score)
         {
             var driver = await _driverRepository.GetByIdAsync(driverId);
             driver.RatingSum += score;
             driver.CountOfRatings++;
             await _driverRepository.UpdateAsync(driver);
-            return driver.RatingSum / driver.CountOfRatings;
         }
 
         public async Task SetLocation(Guid driverId, Point2dEntity newLocation)
