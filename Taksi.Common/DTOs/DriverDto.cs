@@ -11,6 +11,8 @@ namespace Taksi.DTO.DTOs
         public string FullName { get; set; }
         public DriverStatus Status { get; set; }
         public TaxiType TaxiType { get; set; }
+        public double RatingSum { get; set; }
+        public int CountOfRatings { get; set; }
         public Point2d Location { get; set; }
     }
 }
