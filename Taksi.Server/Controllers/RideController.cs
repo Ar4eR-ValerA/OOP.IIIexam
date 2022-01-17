@@ -102,6 +102,19 @@ namespace Taksi.Server.Controllers
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
+        }
+        
+        [HttpPatch]
+        [Route("/rides/end-ride")]
+        public async Task<IActionResult> EndRide([FromQuery] Guid rideId)
+        {
+            if (rideId != Guid.Empty)
+            {
+                await _service.EndRide(rideId);
+                return Ok(await _service.FindOneRide(rideId));
+            }
+
+            return StatusCode((int) HttpStatusCode.BadRequest);
         } 
     }
 }
