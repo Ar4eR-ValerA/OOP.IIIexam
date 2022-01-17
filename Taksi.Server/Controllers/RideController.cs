@@ -72,7 +72,7 @@ namespace Taksi.Server.Controllers
             if (rideId != Guid.Empty && driverId != Guid.Empty)
             {
                 await _service.AssignDriver(rideId, driverId);
-                return Ok(_service.FindOneRide(rideId));
+                return Ok(await _service.FindOneRide(rideId));
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
@@ -85,7 +85,20 @@ namespace Taksi.Server.Controllers
             if (rideId != Guid.Empty)
             {
                 await _service.WaitForClient(rideId);
-                return Ok(_service.FindOneRide(rideId));
+                return Ok(await _service.FindOneRide(rideId));
+            }
+
+            return StatusCode((int) HttpStatusCode.BadRequest);
+        }
+        
+        [HttpPatch]
+        [Route("/rides/start-ride")]
+        public async Task<IActionResult> StartRide([FromQuery] Guid rideId)
+        {
+            if (rideId != Guid.Empty)
+            {
+                await _service.StartRide(rideId);
+                return Ok(await _service.FindOneRide(rideId));
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
