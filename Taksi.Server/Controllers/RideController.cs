@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,34 +22,38 @@ namespace Taksi.Server.Controllers
 
         [HttpPost]
         [Route("/create-ride")]
-        public async Task<RideDto> Create(
-            [FromQuery] Guid client,
+        public async Task<RideDto> CreateRide(
+            [FromQuery] Guid clientId,
             [FromQuery] double startX,
             [FromQuery] double startY,
             [FromQuery] double endX,
             [FromQuery] double endY)
         {
-            
-            return await _service.Create(name);
+            var rideEntity = new RideEntity(
+                new List<Point2dEntity>
+                {
+                    new Point2dEntity(startX, startY),
+                    new Point2dEntity(endX, endY)
+                },
+                clientId);
+            await _service.RegisterRide(rideEntity);
+
+            return new RideDto(
+                rideEntity.Id,
+                rideEntity.Path.Select(p => p.GetDto()).ToList(),
+                rideEntity.Status,
+                rideEntity.AssignedClient,
+                rideEntity.AssignedDriver);
         }
 
         [HttpGet]
-        public IActionResult Find([FromQuery] string name, [FromQuery] Guid id)
+        [Route("/get-ride-for-client")]
+        public IActionResult FindRidesForClient([FromQuery] Guid clientId)
         {
-            if (!string.IsNullOrWhiteSpace(name))
+            // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
+            if (clientId != Guid.Empty)
             {
-                Employee result = _service.FindByName(name);
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-
-                return NotFound();
-            }
-
-            if (id != Guid.Empty)
-            {
-                Employee result = _service.FindById(id);
+                var result = _service.GetAllForClient(clientId);
                 if (result != null)
                 {
                     return Ok(result);
