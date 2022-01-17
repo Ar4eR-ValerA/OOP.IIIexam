@@ -76,6 +76,19 @@ namespace Taksi.Server.Controllers
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
+        }
+        
+        [HttpPatch]
+        [Route("/rides/wait-for-client")]
+        public async Task<IActionResult> WaitForClient([FromQuery] Guid rideId)
+        {
+            if (rideId != Guid.Empty)
+            {
+                await _service.WaitForClient(rideId);
+                return Ok(_service.FindOneRide(rideId));
+            }
+
+            return StatusCode((int) HttpStatusCode.BadRequest);
         } 
     }
 }
