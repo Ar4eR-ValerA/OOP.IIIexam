@@ -21,7 +21,7 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpPost]
-        [Route("/create-ride")]
+        [Route("/rides/create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
             [FromQuery] double startX,
@@ -47,13 +47,13 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet]
-        [Route("/get-ride-for-client")]
-        public IActionResult FindRidesForClient([FromQuery] Guid clientId)
+        [Route("/rides/get-ride-for-client")]
+        public async Task<IActionResult> FindRidesForClient([FromQuery] Guid clientId)
         {
             // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
             if (clientId != Guid.Empty)
             {
-                var result = _service.GetAllForClient(clientId);
+                var result = await _service.GetAllForClient(clientId);
                 if (result != null)
                 {
                     return Ok(result);
@@ -64,5 +64,18 @@ namespace Taksi.Server.Controllers
 
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
+
+        [HttpPatch]
+        [Route("/rides/assign-driver")]
+        public async Task<IActionResult> AssignDriver([FromQuery] Guid rideId, [FromQuery] Guid driverId)
+        {
+            if (rideId != Guid.Empty && driverId != Guid.Empty)
+            {
+                await _service.AssignDriver(rideId, driverId);
+                return Ok(_service.FindOneRide(rideId));
+            }
+
+            return StatusCode((int) HttpStatusCode.BadRequest);
+        } 
     }
 }

@@ -25,6 +25,8 @@ namespace Taksi.Server.BLL.Services.Interfaces
         // Send messages, update status, etc
         Task CancelRide(Guid rideId);
 
+        Task<RideEntity> FindOneRide(Guid rideId);
+
         Task<IEnumerable<RideEntity>> GetAllForClient(Guid clientId);
     }
 }
