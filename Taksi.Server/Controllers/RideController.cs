@@ -11,6 +11,7 @@ using Taksi.Server.DAL.Entities;
 namespace Taksi.Server.Controllers
 {
     [ApiController]
+    [Route("/rides")]
     public class RideController : ControllerBase
     {
         private readonly IRideService _service;
@@ -21,7 +22,7 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpPost]
-        [Route("/rides/create-ride")]
+        [Route("/create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
             double startX,
@@ -47,7 +48,7 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet]
-        [Route("/rides/get-ride-for-client")]
+        [Route("/get-ride-for-client")]
         public async Task<IActionResult> FindRidesForClient([FromQuery] Guid clientId)
         {
             // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
@@ -66,7 +67,7 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpPatch]
-        [Route("/rides/assign-driver")]
+        [Route("/assign-driver")]
         public async Task<IActionResult> AssignDriver([FromQuery] Guid rideId, Guid driverId)
         {
             if (rideId != Guid.Empty && driverId != Guid.Empty)
@@ -79,7 +80,7 @@ namespace Taksi.Server.Controllers
         }
         
         [HttpPatch]
-        [Route("/rides/wait-for-client")]
+        [Route("/wait-for-client")]
         public async Task<IActionResult> WaitForClient([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -92,7 +93,7 @@ namespace Taksi.Server.Controllers
         }
         
         [HttpPatch]
-        [Route("/rides/start-ride")]
+        [Route("/start-ride")]
         public async Task<IActionResult> StartRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -105,7 +106,7 @@ namespace Taksi.Server.Controllers
         }
         
         [HttpPatch]
-        [Route("/rides/end-ride")]
+        [Route("/end-ride")]
         public async Task<IActionResult> EndRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -118,7 +119,7 @@ namespace Taksi.Server.Controllers
         }
         
         [HttpPatch]
-        [Route("/rides/cancel-ride")]
+        [Route("/cancel-ride")]
         public async Task<IActionResult> CancelRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
