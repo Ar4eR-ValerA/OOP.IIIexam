@@ -24,10 +24,10 @@ namespace Taksi.Server.Controllers
         [Route("/rides/create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
-            [FromQuery] double startX,
-            [FromQuery] double startY,
-            [FromQuery] double endX,
-            [FromQuery] double endY)
+            double startX,
+            double startY,
+            double endX,
+            double endY)
         {
             var rideEntity = new RideEntity(
                 new List<Point2dEntity>
@@ -67,7 +67,7 @@ namespace Taksi.Server.Controllers
 
         [HttpPatch]
         [Route("/rides/assign-driver")]
-        public async Task<IActionResult> AssignDriver([FromQuery] Guid rideId, [FromQuery] Guid driverId)
+        public async Task<IActionResult> AssignDriver([FromQuery] Guid rideId, Guid driverId)
         {
             if (rideId != Guid.Empty && driverId != Guid.Empty)
             {
