@@ -21,8 +21,7 @@ namespace Taksi.Server.Controllers
             _service = service;
         }
 
-        [HttpPost]
-        [Route("/create-ride")]
+        [HttpPost("create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
             double startX,
@@ -47,8 +46,7 @@ namespace Taksi.Server.Controllers
                 rideEntity.AssignedDriver);
         }
 
-        [HttpGet]
-        [Route("/get-ride-for-client")]
+        [HttpGet("get-ride-for-client")]
         public async Task<IActionResult> FindRidesForClient([FromQuery] Guid clientId)
         {
             // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
@@ -66,8 +64,7 @@ namespace Taksi.Server.Controllers
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
 
-        [HttpPatch]
-        [Route("/assign-driver")]
+        [HttpPatch("assign-driver")]
         public async Task<IActionResult> AssignDriver([FromQuery] Guid rideId, Guid driverId)
         {
             if (rideId != Guid.Empty && driverId != Guid.Empty)
@@ -79,8 +76,7 @@ namespace Taksi.Server.Controllers
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
         
-        [HttpPatch]
-        [Route("/wait-for-client")]
+        [HttpPatch("wait-for-client")]
         public async Task<IActionResult> WaitForClient([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -92,8 +88,7 @@ namespace Taksi.Server.Controllers
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
         
-        [HttpPatch]
-        [Route("/start-ride")]
+        [HttpPatch("start-ride")]
         public async Task<IActionResult> StartRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -105,8 +100,7 @@ namespace Taksi.Server.Controllers
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
         
-        [HttpPatch]
-        [Route("/end-ride")]
+        [HttpPatch("end-ride")]
         public async Task<IActionResult> EndRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
@@ -118,8 +112,7 @@ namespace Taksi.Server.Controllers
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
         
-        [HttpPatch]
-        [Route("/cancel-ride")]
+        [HttpPatch("cancel-ride")]
         public async Task<IActionResult> CancelRide([FromQuery] Guid rideId)
         {
             if (rideId != Guid.Empty)
