@@ -46,21 +46,21 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpPut]
-        public Task Update([FromQuery] Guid clientId, decimal newBalance)
+        public async Task Update([FromQuery] Guid clientId, decimal newBalance)
         {
-            return _service.SetCreditCardBalance(clientId, newBalance);
+            await _service.SetCreditCardBalance(clientId, newBalance);
         }
 
         [HttpDelete("client")]
-        public void UnregisterClient([FromQuery] Guid clientId)
+        public async Task UnregisterClient([FromQuery] Guid clientId)
         {
-            _service.UnregisterClient(clientId);
+            await _service.UnregisterClient(clientId);
         }
 
         [HttpDelete("card")]
-        public void UnregisterCreditCard([FromQuery] Guid creditCardId)
+        public async Task UnregisterCreditCard([FromQuery] Guid creditCardId)
         {
-            _service.UnregisterCreditCard(creditCardId);
+            await _service.UnregisterCreditCard(creditCardId);
         }
     }
 }
