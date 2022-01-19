@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Taksi.DTO.Enums;
-using Taksi.DTO.Models;
 using Taksi.Server.DAL.Entities;
 
 namespace Taksi.Server.BLL.Services.Interfaces
