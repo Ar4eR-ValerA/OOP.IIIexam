@@ -10,7 +10,7 @@ namespace Taksi.Server.Controllers
     [Route("/clients")]
     public class ClientController : ControllerBase
     {
-        protected readonly IClientService _service;
+        private readonly IClientService _service;
 
         public ClientController(IClientService service)
         {
@@ -30,18 +30,18 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet("card")]
-        public IActionResult HasCreditCard([FromQuery] Guid clientId)
+        public async Task<IActionResult> HasCreditCard([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
-            bool result = _service.HasCreditCard(clientId).Result;
+            bool result = await _service.HasCreditCard(clientId);
             return Ok(result);
         }
 
         [HttpGet("balance")]
-        public IActionResult GetCreditCardBalance([FromQuery] Guid clientId)
+        public async Task<IActionResult> GetCreditCardBalance([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
-            decimal balance = _service.GetCreditCardBalance(clientId).Result;
+            decimal balance = await _service.GetCreditCardBalance(clientId);
             return Ok(balance);
         }
 
