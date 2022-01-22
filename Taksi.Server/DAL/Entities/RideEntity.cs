@@ -10,10 +10,11 @@ namespace Taksi.Server.DAL.Entities
 {
     public class RideEntity : IIdentifiable
     {
-        private List<Point2dEntity> _path;
+        private readonly List<Point2dEntity> _path;
 
-        internal RideEntity()
+        public RideEntity()
         {
+            _path = new List<Point2dEntity>();
         }
 
         public RideEntity(List<Point2dEntity> path, Guid assignedClient)
@@ -23,11 +24,11 @@ namespace Taksi.Server.DAL.Entities
             AssignedClient = assignedClient;
         }
 
-        public Guid Id { get; set; }
-        public IReadOnlyList<Point2dEntity> Path => _path;
-        public RideStatus Status { get; set; }
-        public Guid AssignedDriver { get; set; }
-        public Guid AssignedClient { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual IReadOnlyList<Point2dEntity> Path => _path;
+        public virtual RideStatus Status { get; set; }
+        public virtual Guid AssignedDriver { get; set; }
+        public virtual Guid AssignedClient { get; set; }
 
         public RideDto GetDto()
         {

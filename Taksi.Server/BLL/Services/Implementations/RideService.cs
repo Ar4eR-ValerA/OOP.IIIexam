@@ -43,6 +43,7 @@ namespace Taksi.Server.BLL.Services.Implementations
             }
 
             rideEntity.AssignedDriver = driverId;
+            rideEntity.Status = RideStatus.DriverComing;
             await _rideRepo.UpdateAsync(rideEntity);
         }
 
