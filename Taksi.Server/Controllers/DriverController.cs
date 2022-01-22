@@ -123,9 +123,9 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet("get-nearest-to-location")]
-        public async Task<Guid> GetNearestToLocation(Point2d point)
+        public Guid GetNearestToLocation(Point2d point)
         {
-            var id = await _service.GetNearestToLocation(new Point2dEntity(point.X, point.Y));
+            var id = _service.GetNearestToLocation(new Point2dEntity(point.X, point.Y));
 
             return id;
         }

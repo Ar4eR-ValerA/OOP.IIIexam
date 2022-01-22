@@ -6,6 +6,9 @@ namespace Taksi.Server.DAL.Entities
 {
     public class Point2dEntity : IIdentifiable
     {
+        internal Point2dEntity()
+        {
+        }
 
         public Point2dEntity(double x, double y)
         {

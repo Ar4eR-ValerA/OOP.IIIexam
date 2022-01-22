@@ -8,6 +8,10 @@ namespace Taksi.Server.DAL.Entities
 {
     public class DriverEntity : IIdentifiable
     {
+        internal DriverEntity()
+        {
+        }
+
         public DriverEntity(string fullName, TaxiType taxiType)
         {
             Id = Guid.NewGuid();

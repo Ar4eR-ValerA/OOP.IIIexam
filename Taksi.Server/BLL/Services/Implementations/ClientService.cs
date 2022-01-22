@@ -38,23 +38,23 @@ namespace Taksi.Server.BLL.Services.Implementations
             await _creditCardRepository.RemoveAsync(creditCardId);
         }
 
-        public async Task<bool> HasCreditCard(Guid clientId)
+        public bool HasCreditCard(Guid clientId)
         {
-            var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
+            var cards = _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             return cards.Any();
         }
 
-        public async Task<decimal> GetCreditCardBalance(Guid clientId)
+        public decimal GetCreditCardBalance(Guid clientId)
         {
-            var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
+            var cards = _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             return cards.Last().CardBalance;
         }
 
-        public async Task SetCreditCardBalance(Guid clientId, decimal newBalance)
+        public void SetCreditCardBalance(Guid clientId, decimal newBalance)
         {
-            var cards = await _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
+            var cards = _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             cards.Last().CardBalance = newBalance;
-            await _creditCardRepository.UpdateAsync(cards.Last());
+            _creditCardRepository.UpdateAsync(cards.Last());
         }
     }
 }

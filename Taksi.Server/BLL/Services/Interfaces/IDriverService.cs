@@ -28,6 +28,6 @@ namespace Taksi.Server.BLL.Services.Interfaces
 
         // Look for DriverStatus == WaitingForClient,
         // Fetch id of nearest to provided location
-        Task<Guid> GetNearestToLocation(Point2dEntity location);
+        Guid GetNearestToLocation(Point2dEntity location);
     }
 }

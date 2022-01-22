@@ -26,6 +26,6 @@ namespace Taksi.Server.BLL.Services.Interfaces
 
         Task<RideEntity> FindOneRide(Guid rideId);
 
-        Task<IEnumerable<RideEntity>> GetAllForClient(Guid clientId);
+        IEnumerable<RideEntity> GetAllForClient(Guid clientId);
     }
 }

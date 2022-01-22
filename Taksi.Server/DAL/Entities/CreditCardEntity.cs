@@ -5,8 +5,19 @@ namespace Taksi.Server.DAL.Entities
 {
     public class CreditCardEntity : IIdentifiable
     {
-        public Guid Id { get; set; }
+        internal CreditCardEntity()
+        {
+        }
 
+        public CreditCardEntity(Guid clientId, string cardId, decimal cardBalance)
+        {
+            Id = Guid.NewGuid();
+            ClientId = clientId;
+            CardId = cardId;
+            CardBalance = cardBalance;
+        }
+        
+        public Guid Id { get; set; }
         public Guid ClientId { get; set; } 
         public string CardId { get; set; }
         public decimal CardBalance { get; set; }
