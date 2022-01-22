@@ -15,5 +15,6 @@ namespace Taksi.Server.DAL.Repositories.Implementations.Ef
         public DbSet<DriverEntity> Drivers { get; set; }
         public DbSet<RideEntity> Rides { get; set; }
         public DbSet<CreditCardEntity> CreditCards { get; set; }
+        public DbSet<Point2dEntity> Points { get; set; }
     }
 }
