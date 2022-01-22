@@ -5,7 +5,7 @@ namespace Taksi.Server.DAL.Entities
 {
     public class ClientEntity : IIdentifiable
     {
-        internal ClientEntity()
+        public ClientEntity()
         {
         }
 
@@ -15,8 +15,8 @@ namespace Taksi.Server.DAL.Entities
             FullName = fullName;
         }
 
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
-        public string FullName { get; set; }
+        public virtual string FullName { get; set; }
     }
 }
