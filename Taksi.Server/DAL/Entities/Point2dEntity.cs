@@ -6,6 +6,7 @@ namespace Taksi.Server.DAL.Entities
 {
     public class Point2dEntity : IIdentifiable
     {
+
         public Point2dEntity(double x, double y)
         {
             X = x;
@@ -13,9 +14,11 @@ namespace Taksi.Server.DAL.Entities
             Id = Guid.NewGuid();
         }
 
+
         public Guid Id { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
+
 
         public Point2d GetDto()
         {
