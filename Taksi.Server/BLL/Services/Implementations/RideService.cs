@@ -109,9 +109,9 @@ namespace Taksi.Server.BLL.Services.Implementations
             return await _rideRepo.GetByIdAsync(rideId);
         }
 
-        public async Task<IEnumerable<RideEntity>> GetAllForClient(Guid clientId)
+        public IEnumerable<RideEntity> GetAllForClient(Guid clientId)
         {
-            return await _rideRepo.GetWhereAsync(ride => ride.AssignedClient == clientId);
+            return _rideRepo.GetWhereAsync(ride => ride.AssignedClient == clientId);
         }
     }
 }

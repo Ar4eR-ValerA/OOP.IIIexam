@@ -15,8 +15,8 @@ namespace Taksi.Server.BLL.Services.Interfaces
         Task UnregisterCreditCard(Guid creditCardId);
 
         // Work with credit card repository
-        Task<bool> HasCreditCard(Guid clientId);
-        Task<decimal> GetCreditCardBalance(Guid clientId);
-        Task SetCreditCardBalance(Guid clientId, decimal newBalance);
+        bool HasCreditCard(Guid clientId);
+        decimal GetCreditCardBalance(Guid clientId);
+        void SetCreditCardBalance(Guid clientId, decimal newBalance);
     }
 }

@@ -39,12 +39,12 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet("get-ride-for-client")]
-        public async Task<IActionResult> FindRidesForClient([FromQuery] Guid clientId)
+        public IActionResult FindRidesForClient([FromQuery] Guid clientId)
         {
             // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
             if (clientId != Guid.Empty)
             {
-                var result = await _service.GetAllForClient(clientId);
+                var result = _service.GetAllForClient(clientId);
                 if (result != null)
                 {
                     return Ok(result);

@@ -1,18 +1,19 @@
-﻿using System;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Taksi.DTO.Enums;
+
 using Taksi.Server.DAL.Entities;
 
 namespace Taksi.Server.DAL.Repositories.Implementations.Ef
 {
     public class EfRideRepository : EfRepository<RideEntity>
     {
-        public EfRideRepository(DbContext context, DbSet<RideEntity> container)
-            : base(context, container)
+        public EfRideRepository(EfContext context) : base(context, context.Rides)
         {
         }
 

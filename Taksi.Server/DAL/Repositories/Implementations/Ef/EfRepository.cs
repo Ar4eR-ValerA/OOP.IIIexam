@@ -31,9 +31,9 @@ namespace Taksi.Server.DAL.Repositories.Implementations.Ef
             return await DbSetContainer.ToListAsync();   
         }
         
-        public async Task<IEnumerable<T>> GetWhereAsync(Func<T, bool> predicate)
+        public IEnumerable<T> GetWhereAsync(Func<T, bool> predicate)
         {
-            return await DbSetContainer.Where(predicate).AsQueryable().ToListAsync();
+            return DbSetContainer.Where(predicate).AsQueryable().ToList();
         }
 
         public async Task InsertAsync(T entity)

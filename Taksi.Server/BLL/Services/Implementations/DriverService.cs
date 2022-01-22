@@ -78,10 +78,10 @@ namespace Taksi.Server.BLL.Services.Implementations
             return driver.TaxiType;
         }
 
-        public async Task<Guid> GetNearestToLocation(Point2dEntity location)
+        public Guid GetNearestToLocation(Point2dEntity location)
         {
             var drivers =
-                await _driverRepository.GetWhereAsync(driver => driver.Status.Equals(DriverStatus.WaitingForClient));
+                _driverRepository.GetWhereAsync(driver => driver.Status.Equals(DriverStatus.WaitingForClient));
             var driverEntities = drivers.ToList();
 
             if (!driverEntities.Any())

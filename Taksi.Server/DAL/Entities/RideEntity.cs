@@ -12,6 +12,10 @@ namespace Taksi.Server.DAL.Entities
     {
         private List<Point2dEntity> _path;
 
+        internal RideEntity()
+        {
+        }
+
         public RideEntity(List<Point2dEntity> path, Guid assignedClient)
         {
             Id = Guid.NewGuid();
@@ -20,7 +24,6 @@ namespace Taksi.Server.DAL.Entities
         }
 
         public Guid Id { get; set; }
-
         public IReadOnlyList<Point2dEntity> Path => _path;
         public RideStatus Status { get; set; }
         public Guid AssignedDriver { get; set; }

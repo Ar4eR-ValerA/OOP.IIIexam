@@ -30,25 +30,25 @@ namespace Taksi.Server.Controllers
         }
 
         [HttpGet("card")]
-        public async Task<IActionResult> HasCreditCard([FromQuery] Guid clientId)
+        public IActionResult HasCreditCard([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
-            bool result = await _service.HasCreditCard(clientId);
+            bool result = _service.HasCreditCard(clientId);
             return Ok(result);
         }
 
         [HttpGet("balance")]
-        public async Task<IActionResult> GetCreditCardBalance([FromQuery] Guid clientId)
+        public IActionResult GetCreditCardBalance([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
-            decimal balance = await _service.GetCreditCardBalance(clientId);
+            decimal balance = _service.GetCreditCardBalance(clientId);
             return Ok(balance);
         }
 
         [HttpPut]
-        public async Task Update([FromQuery] Guid clientId, decimal newBalance)
+        public void Update([FromQuery] Guid clientId, decimal newBalance)
         {
-            await _service.SetCreditCardBalance(clientId, newBalance);
+            _service.SetCreditCardBalance(clientId, newBalance);
         }
 
         [HttpDelete("client")]

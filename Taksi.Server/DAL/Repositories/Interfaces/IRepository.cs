@@ -8,7 +8,7 @@ namespace Taksi.Server.DAL.Repositories.Interfaces
     {
         Task<T> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> GetWhereAsync(Func<T, bool> predicate);
+        IEnumerable<T> GetWhereAsync(Func<T, bool> predicate);
 
         Task InsertAsync(T entity);
         Task UpdateAsync(T entity);
