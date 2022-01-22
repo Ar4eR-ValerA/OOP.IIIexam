@@ -8,7 +8,7 @@ namespace Taksi.Server.DAL.Entities
 {
     public class DriverEntity : IIdentifiable
     {
-        internal DriverEntity()
+        public DriverEntity()
         {
         }
 
@@ -24,13 +24,13 @@ namespace Taksi.Server.DAL.Entities
             Location = new Point2dEntity(0, 0);
         }
 
-        public Guid Id { get; set; }
-        public string FullName { get; set; }
-        public DriverStatus Status { get; set; }
-        public TaxiType TaxiType { get; set; }
-        public double RatingSum { get; set; }
-        public int CountOfRatings { get; set; }
-        public Point2dEntity Location { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual string FullName { get; set; }
+        public virtual DriverStatus Status { get; set; }
+        public virtual TaxiType TaxiType { get; set; }
+        public virtual double RatingSum { get; set; }
+        public virtual int CountOfRatings { get; set; }
+        public virtual Point2dEntity Location { get; set; }
 
         public DriverDto GetDto()
         {
