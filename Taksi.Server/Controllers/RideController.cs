@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Taksi.DTO.DTOs;
+using Taksi.DTO.Models;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
 
@@ -24,18 +25,9 @@ namespace Taksi.Server.Controllers
         [HttpPost("create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
-            double startX,
-            double startY,
-            double endX,
-            double endY)
+            [FromBody] IEnumerable<Point2d> points)
         {
-            var rideEntity = new RideEntity(
-                new List<Point2dEntity>
-                {
-                    new Point2dEntity(startX, startY),
-                    new Point2dEntity(endX, endY)
-                },
-                clientId);
+            var rideEntity = new RideEntity(points.Select(p => new Point2dEntity(p.X, p.Y)).ToList(), clientId);
             await _service.RegisterRide(rideEntity);
 
             return new RideDto(
@@ -75,7 +67,7 @@ namespace Taksi.Server.Controllers
 
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
-        
+
         [HttpPatch("wait-for-client")]
         public async Task<IActionResult> WaitForClient([FromQuery] Guid rideId)
         {
@@ -87,7 +79,7 @@ namespace Taksi.Server.Controllers
 
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
-        
+
         [HttpPatch("start-ride")]
         public async Task<IActionResult> StartRide([FromQuery] Guid rideId)
         {
@@ -99,7 +91,7 @@ namespace Taksi.Server.Controllers
 
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
-        
+
         [HttpPatch("end-ride")]
         public async Task<IActionResult> EndRide([FromQuery] Guid rideId)
         {
@@ -111,7 +103,7 @@ namespace Taksi.Server.Controllers
 
             return StatusCode((int) HttpStatusCode.BadRequest);
         }
-        
+
         [HttpPatch("cancel-ride")]
         public async Task<IActionResult> CancelRide([FromQuery] Guid rideId)
         {
@@ -122,6 +114,6 @@ namespace Taksi.Server.Controllers
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
-        } 
+        }
     }
 }
