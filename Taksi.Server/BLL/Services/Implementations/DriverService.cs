@@ -49,7 +49,9 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task SetLocation(Guid driverId, Point2dEntity newLocation)
         {
             var driver = await _driverRepository.GetByIdAsync(driverId);
-            driver.Location = newLocation;
+            driver.Location ??= newLocation;
+            driver.Location.X = newLocation.X;
+            driver.Location.Y = newLocation.Y;
             await _driverRepository.UpdateAsync(driver);
         }
 
@@ -80,8 +82,7 @@ namespace Taksi.Server.BLL.Services.Implementations
 
         public Guid GetNearestToLocation(Point2dEntity location)
         {
-            var drivers =
-                _driverRepository.GetWhereAsync(driver => driver.Status.Equals(DriverStatus.WaitingForClient));
+            var drivers = _driverRepository.GetWhereAsync(driver => driver.Status.Equals(DriverStatus.WaitingForClient));
             var driverEntities = drivers.ToList();
 
             if (!driverEntities.Any())
