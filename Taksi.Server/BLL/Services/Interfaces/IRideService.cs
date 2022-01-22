@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Taksi.DTO.Enums;
 using Taksi.Server.DAL.Entities;
 
 namespace Taksi.Server.BLL.Services.Interfaces
@@ -24,6 +23,8 @@ namespace Taksi.Server.BLL.Services.Interfaces
 
         // Send messages, update status, etc
         Task CancelRide(Guid rideId);
+
+        Task<RideEntity> FindOneRide(Guid rideId);
 
         Task<IEnumerable<RideEntity>> GetAllForClient(Guid clientId);
     }
