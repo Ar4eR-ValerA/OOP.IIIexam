@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
+using Taksi.Server.DAL.Exceptions;
 using Taksi.Server.DAL.Repositories.Interfaces;
 
 namespace Taksi.Server.BLL.Services.Implementations
@@ -46,12 +47,16 @@ namespace Taksi.Server.BLL.Services.Implementations
 
         public decimal GetCreditCardBalance(Guid clientId)
         {
+            if (!HasCreditCard(clientId))
+                throw new EntityDoesNotExistException("Current client doesn't have credit card");
             var cards = _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             return cards.Last().CardBalance;
         }
 
         public void SetCreditCardBalance(Guid clientId, decimal newBalance)
         {
+            if (!HasCreditCard(clientId))
+                throw new EntityDoesNotExistException("Current client doesn't have credit card");
             var cards = _creditCardRepository.GetWhereAsync(card => card.ClientId == clientId);
             cards.Last().CardBalance = newBalance;
             _creditCardRepository.UpdateAsync(cards.Last());

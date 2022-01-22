@@ -17,19 +17,19 @@ namespace Taksi.Server.Controllers
             _service = service;
         }
 
-        [HttpPost("client")]
-        public async Task RegisterClient(ClientEntity client)
+        [HttpPost("register-client")]
+        public async Task RegisterClient([FromQuery] string fullName)
         {
-            await _service.RegisterClient(client);
+            await _service.RegisterClient(new ClientEntity(fullName));
         }
 
-        [HttpPost("card")]
-        public async Task RegisterCreditCard(CreditCardEntity creditCard)
+        [HttpPost("register-credit-card")]
+        public async Task RegisterCreditCard([FromQuery] Guid clientId, decimal balance)
         {
-            await _service.RegisterCreditCard(creditCard);
+            await _service.RegisterCreditCard(new CreditCardEntity(clientId, balance));
         }
 
-        [HttpGet("card")]
+        [HttpGet("check-credit-card")]
         public IActionResult HasCreditCard([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
@@ -37,7 +37,7 @@ namespace Taksi.Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("balance")]
+        [HttpGet("get-credit-card-balance")]
         public IActionResult GetCreditCardBalance([FromQuery] Guid clientId)
         {
             if (clientId == Guid.Empty) return BadRequest();
@@ -45,19 +45,19 @@ namespace Taksi.Server.Controllers
             return Ok(balance);
         }
 
-        [HttpPut]
+        [HttpPut("set-credit-card-balance")]
         public void Update([FromQuery] Guid clientId, decimal newBalance)
         {
             _service.SetCreditCardBalance(clientId, newBalance);
         }
 
-        [HttpDelete("client")]
+        [HttpDelete("unregister-client")]
         public async Task UnregisterClient([FromQuery] Guid clientId)
         {
             await _service.UnregisterClient(clientId);
         }
 
-        [HttpDelete("card")]
+        [HttpDelete("unregister-credit-card")]
         public async Task UnregisterCreditCard([FromQuery] Guid creditCardId)
         {
             await _service.UnregisterCreditCard(creditCardId);
