@@ -11,6 +11,7 @@ using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
 using Taksi.Server.DAL.Repositories.Implementations.Ef;
 using Taksi.Server.DAL.Repositories.Interfaces;
+using Taksi.Server.Logger;
 
 namespace Taksi.Server
 {
@@ -38,6 +39,7 @@ namespace Taksi.Server
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IRideService, RideService>();
             services.AddTransient<IDriverService, DriverService>();
+            services.AddTransient<ILogger, ConsoleLogger>();
 
             services
                 .AddControllers()
