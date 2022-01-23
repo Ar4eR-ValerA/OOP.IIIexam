@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Taksi.Driver.Ui;
 
 namespace Taksi.Driver
 {
@@ -6,7 +6,8 @@ namespace Taksi.Driver
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var uiService = new UiService();
+            uiService.Run();
         }
     }
 }

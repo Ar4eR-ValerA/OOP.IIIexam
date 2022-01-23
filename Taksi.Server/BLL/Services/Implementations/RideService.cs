@@ -88,12 +88,13 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("There is no such ride");
             }
 
+            driverEntity.Status = DriverStatus.Busy;
             rideEntity.AssignedDriver = driverId;
             rideEntity.Status = RideStatus.DriverComing;
+            
+            _logger.LogInfo($"Assign driver {driverId} for ride {rideId}.\nUpdate ride {rideId} status on DriverComing.");
 
-            _logger.LogInfo(
-                $"Assign driver {driverId} for ride {rideId}.\nUpdate ride {rideId} status on DriverComing.");
-
+            await _driverRepo.UpdateAsync(driverEntity);
             await _rideRepo.UpdateAsync(rideEntity);
         }
 
@@ -128,30 +129,40 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task EndRide(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
+            var driver = await _driverRepo.GetByIdAsync(ride.AssignedDriver);
 
             // TODO: Custom exception class?
             if (ride.Status != RideStatus.InProcess)
                 throw new ArgumentException("Only InProcess -> Finished sequence is correct");
 
             ride.Status = RideStatus.Finished;
-
+            driver.Status = DriverStatus.WaitingForClient;
+            
             _logger.LogInfo($"Update ride {rideId} status on Finished.");
-
+            
             await _rideRepo.UpdateAsync(ride);
+            await _driverRepo.UpdateAsync(driver);
+
         }
 
         public async Task CancelRide(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-            
+            var driver = await _driverRepo.GetByIdAsync(ride.AssignedDriver);
+
             if (ride.Status != RideStatus.DriverComing)
                 throw new ArgumentException("Only DriverComing -> Cancelled sequence is correct");
 
             ride.Status = RideStatus.Cancelled;
 
-            _logger.LogInfo($"Update ride {rideId} status on Cancelled.");
+            driver.Status = DriverStatus.WaitingForClient;
 
+
+            _logger.LogInfo($"Update ride {rideId} status on Cancelled.");
+            
             await _rideRepo.UpdateAsync(ride);
+            await _driverRepo.UpdateAsync(driver);
+
         }
 
         public async Task<RideEntity> FindOneRide(Guid rideId)

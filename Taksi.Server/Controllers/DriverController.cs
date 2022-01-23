@@ -22,15 +22,14 @@ namespace Taksi.Server.Controllers
         {
             _service = service;
         }
-
-        //TODO: проверить задаются ли в Swaggere enum как число
+        
         [HttpPost("register-driver")]
         public async Task<DriverDto> RegisterDriver(
             [FromQuery]
             [Required(ErrorMessage = "Name not specified")]
             [StringLength(_fullNameMaxLen, ErrorMessage = "Comment too long")]
             string name,
-            [Range(0, 3)] [Required(ErrorMessage = "Taxi type not specified")]
+            [Required(ErrorMessage = "Taxi type not specified")]
             TaxiType taxiType)
         {
             var driver = new DriverEntity(name, taxiType);
