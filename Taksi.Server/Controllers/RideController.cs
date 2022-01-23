@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Taksi.DTO.DTOs;
+using Taksi.DTO.Enums;
 using Taksi.DTO.Models;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
@@ -25,15 +26,20 @@ namespace Taksi.Server.Controllers
         [HttpPost("create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
+            TaxiType taxiType,
             [FromBody] IEnumerable<Point2d> points)
         {
-            var rideEntity = new RideEntity(points.Select(p => new Point2dEntity(p.X, p.Y)).ToList(), clientId);
+            var rideEntity = new RideEntity(
+                points.Select(p => new Point2dEntity(p.X, p.Y)).ToList(),
+                clientId,
+                taxiType);
             await _service.RegisterRide(rideEntity);
 
             return new RideDto(
                 rideEntity.Id,
                 rideEntity.Path.Select(p => p.GetDto()).ToList(),
                 rideEntity.Price,
+                rideEntity.TaxiType,
                 rideEntity.Status,
                 rideEntity.AssignedClient,
                 rideEntity.AssignedDriver);

@@ -17,18 +17,20 @@ namespace Taksi.Server.DAL.Entities
             _path = new List<Point2dEntity>();
         }
 
-        public RideEntity(List<Point2dEntity> path, Guid assignedClient)
+        public RideEntity(List<Point2dEntity> path, Guid assignedClient, TaxiType taxiType)
         {
             Id = Guid.NewGuid();
             _path = path;
             AssignedClient = assignedClient;
             Status = RideStatus.Opened;
+            TaxiType = taxiType;
 
         }
 
         public virtual Guid Id { get; set; }
         public virtual IReadOnlyList<Point2dEntity> Path => _path;
         public virtual double Price { get; set; }
+        public virtual TaxiType TaxiType { get; set; }
         public virtual RideStatus Status { get; set; }
         public virtual Guid AssignedDriver { get; set; }
         public virtual Guid AssignedClient { get; set; }
@@ -39,6 +41,7 @@ namespace Taksi.Server.DAL.Entities
                 Id,
                 Path.Select(p => new Point2d(p.X, p.Y)).ToList(),
                 Price,
+                TaxiType,
                 Status,
                 AssignedClient,
                 AssignedDriver);

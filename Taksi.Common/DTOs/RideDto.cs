@@ -13,6 +13,7 @@ namespace Taksi.DTO.DTOs
             Guid id,
             List<Point2d> path,
             double price,
+            TaxiType taxiType,
             RideStatus rideStatus,
             Guid assignedClient,
             Guid assignedDriver)
@@ -21,6 +22,7 @@ namespace Taksi.DTO.DTOs
             _path = path;
             Price = price;
             Status = rideStatus;
+            TaxiType = taxiType;
             AssignedClient = assignedClient;
             AssignedDriver = assignedDriver;
         }
@@ -28,6 +30,7 @@ namespace Taksi.DTO.DTOs
         public Guid Id { get; set; }
         public IReadOnlyList<Point2d> Path => _path;
         public double Price { get; set; }
+        public virtual TaxiType TaxiType { get; set; }
         public RideStatus Status { get; set; }
         public Guid AssignedDriver { get; set; }
         public Guid AssignedClient { get; set; }
