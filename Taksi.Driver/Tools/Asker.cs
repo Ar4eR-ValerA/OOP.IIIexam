@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Spectre.Console;
-using Taksi.DTO.Enums;
 using Taksi.Server.DAL.Exceptions;
 
 namespace Taksi.Driver.Tools
@@ -57,6 +57,11 @@ namespace Taksi.Driver.Tools
         public string AskString(string message)
         {
             return AnsiConsole.Ask<string>(message + "\n");
+        }
+
+        public Guid AskGuid(string message)
+        {
+            return AnsiConsole.Ask<Guid>(message + "\n");
         }
     }
 }

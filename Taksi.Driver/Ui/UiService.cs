@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using Spectre.Console;
 using Taksi.Driver.Tools;
 
@@ -22,7 +21,14 @@ namespace Taksi.Driver.Ui
         {
             Command[] commands =
             {
-                new Command("Register driver", () => _executor.RegisterDriver(_client)),
+                new Command("Register driver", async () => await _executor.RegisterDriver(_client)),
+                new Command("Unregister driver", async () => await _executor.UnregisterDriver(_client)),
+                new Command("Order", async () => await _executor.Order(_client)),
+                new Command("Update driver status", async () => await _executor.UpdateDriverStatus(_client)),
+                new Command("Wait for client", async () => await _executor.WaitForClient(_client)),
+                new Command("Start ride", async () => await _executor.StartRide(_client)),
+                new Command("End ride", async () => await _executor.EndRide(_client)),
+                new Command("Cancel ride", async () => await _executor.CancelRide(_client)),
                 new Command("exit"),
             };
 
@@ -33,7 +39,7 @@ namespace Taksi.Driver.Ui
                 command.Action();
 
                 AnsiConsole.Clear();
-                
+
                 command = _asker.AskChoices("Enter command", commands);
             }
         }
