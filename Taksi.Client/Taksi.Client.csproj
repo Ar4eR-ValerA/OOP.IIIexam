@@ -6,4 +6,7 @@
         <RootNamespace>ITMO.Client</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Spectre.Console" Version="0.43.1-preview.0.19" />
+    </ItemGroup>
 </Project>
