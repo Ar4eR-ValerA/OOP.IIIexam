@@ -33,6 +33,7 @@ namespace Taksi.Server.Controllers
             return new RideDto(
                 rideEntity.Id,
                 rideEntity.Path.Select(p => p.GetDto()).ToList(),
+                rideEntity.Price,
                 rideEntity.Status,
                 rideEntity.AssignedClient,
                 rideEntity.AssignedDriver);
