@@ -47,11 +47,13 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("There is no such ride");
             }
 
+            driverEntity.Status = DriverStatus.Busy;
             rideEntity.AssignedDriver = driverId;
             rideEntity.Status = RideStatus.DriverComing;
             
             _logger.LogInfo($"Assign driver {driverId} for ride {rideId}.\nUpdate ride {rideId} status on DriverComing.");
-            
+
+            await _driverRepo.UpdateAsync(driverEntity);
             await _rideRepo.UpdateAsync(rideEntity);
         }
 
