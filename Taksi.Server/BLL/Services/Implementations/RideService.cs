@@ -5,6 +5,7 @@ using Taksi.DTO.Enums;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
 using Taksi.Server.DAL.Repositories.Interfaces;
+using Taksi.Server.Logger;
 
 namespace Taksi.Server.BLL.Services.Implementations
 {
@@ -12,15 +13,19 @@ namespace Taksi.Server.BLL.Services.Implementations
     {
         private readonly IRepository<RideEntity> _rideRepo;
         private readonly IRepository<DriverEntity> _driverRepo;
+        private readonly ILogger _logger;
 
-        public RideService(IRepository<RideEntity> rideRepo, IRepository<DriverEntity> driverRepo)
+        public RideService(IRepository<RideEntity> rideRepo, IRepository<DriverEntity> driverRepo, ILogger logger)
         {
             _rideRepo = rideRepo ?? throw new ArgumentNullException(nameof(rideRepo));
             _driverRepo = driverRepo ?? throw new ArgumentNullException(nameof(driverRepo));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task RegisterRide(RideEntity rideEntity)
         {
+            _logger.LogInfo($"Ride {rideEntity.Id} registered.");
+            
             await _rideRepo.InsertAsync(rideEntity);
         }
 
@@ -44,6 +49,9 @@ namespace Taksi.Server.BLL.Services.Implementations
 
             rideEntity.AssignedDriver = driverId;
             rideEntity.Status = RideStatus.DriverComing;
+            
+            _logger.LogInfo($"Assign driver {driverId} for ride {rideId}.\nUpdate ride {rideId} status on DriverComing.");
+            
             await _rideRepo.UpdateAsync(rideEntity);
         }
 
@@ -56,6 +64,9 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("Only DriverComing -> WaitingClient sequence is correct");
 
             ride.Status = RideStatus.WaitingClient;
+            
+            _logger.LogInfo($"Update ride {rideId} status on WaitingClient.");
+            
             await _rideRepo.UpdateAsync(ride);
 
             // TODO: Send messages to clients, if SignalR will work with us of course
@@ -70,6 +81,9 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("Only WaitingClient -> InProcess sequence is correct");
 
             ride.Status = RideStatus.InProcess;
+            
+            _logger.LogInfo($"Update ride {rideId} status on InProcess.");
+            
             await _rideRepo.UpdateAsync(ride);
 
             // TODO: Send messages to clients, if SignalR will work with us of course
@@ -84,6 +98,9 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("Only InProcess -> Finished sequence is correct");
 
             ride.Status = RideStatus.Finished;
+            
+            _logger.LogInfo($"Update ride {rideId} status on Finished.");
+            
             await _rideRepo.UpdateAsync(ride);
 
             // TODO: Send messages to clients, if SignalR will work with us of course
@@ -98,6 +115,9 @@ namespace Taksi.Server.BLL.Services.Implementations
                 throw new ArgumentException("Only DriverComing -> Cancelled sequence is correct");
 
             ride.Status = RideStatus.Cancelled;
+            
+            _logger.LogInfo($"Update ride {rideId} status on Cancelled.");
+            
             await _rideRepo.UpdateAsync(ride);
 
             // TODO: Send messages to clients, if SignalR will work with us of course
@@ -107,11 +127,15 @@ namespace Taksi.Server.BLL.Services.Implementations
 
         public async Task<RideEntity> FindOneRide(Guid rideId)
         {
+            _logger.LogInfo($"Find ride {rideId}.");
+            
             return await _rideRepo.GetByIdAsync(rideId);
         }
 
         public IEnumerable<RideEntity> GetAllForClient(Guid clientId)
         {
+            _logger.LogInfo($"Find all rides for client {clientId}.");
+            
             return _rideRepo.GetWhereAsync(ride => ride.AssignedClient == clientId);
         }
     }

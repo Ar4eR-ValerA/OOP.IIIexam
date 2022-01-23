@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Taksi.DTO.Enums;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
-using Taksi.Server.DAL.Exceptions;
 using Taksi.Server.DAL.Repositories.Interfaces;
 using Taksi.Server.Logger;
 
@@ -19,7 +18,6 @@ namespace Taksi.Server.BLL.Services.Implementations
         {
             _driverRepository = driverRepo ?? throw new ArgumentNullException(nameof(driverRepo));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
         }
 
         public async Task RegisterDriver(DriverEntity driverEntity)
