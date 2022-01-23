@@ -100,8 +100,7 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task WaitForClient(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.DriverComing)
                 throw new ArgumentException("Only DriverComing -> WaitingClient sequence is correct");
 
@@ -110,15 +109,12 @@ namespace Taksi.Server.BLL.Services.Implementations
             _logger.LogInfo($"Update ride {rideId} status on WaitingClient.");
 
             await _rideRepo.UpdateAsync(ride);
-
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
 
         public async Task StartRide(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.WaitingClient)
                 throw new ArgumentException("Only WaitingClient -> InProcess sequence is correct");
 
@@ -127,8 +123,6 @@ namespace Taksi.Server.BLL.Services.Implementations
             _logger.LogInfo($"Update ride {rideId} status on InProcess.");
 
             await _rideRepo.UpdateAsync(ride);
-
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
 
         public async Task EndRide(Guid rideId)
@@ -144,15 +138,12 @@ namespace Taksi.Server.BLL.Services.Implementations
             _logger.LogInfo($"Update ride {rideId} status on Finished.");
 
             await _rideRepo.UpdateAsync(ride);
-
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
 
         public async Task CancelRide(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.DriverComing)
                 throw new ArgumentException("Only DriverComing -> Cancelled sequence is correct");
 
@@ -161,11 +152,7 @@ namespace Taksi.Server.BLL.Services.Implementations
             _logger.LogInfo($"Update ride {rideId} status on Cancelled.");
 
             await _rideRepo.UpdateAsync(ride);
-
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
-
-        // TODO: Добавить какой-нить общий метод find, который по куче параметров найдёт все подходящие поездки
 
         public async Task<RideEntity> FindOneRide(Guid rideId)
         {

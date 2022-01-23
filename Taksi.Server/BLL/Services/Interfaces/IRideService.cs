@@ -7,10 +7,16 @@ namespace Taksi.Server.BLL.Services.Interfaces
 {
     public interface IRideService
     {
+        public double StandardCoefficient { get; set; }
+        public double ComfortCoefficient { get; set; }
+        public double BusinessCoefficient { get; set; }
+        public double LuxuryCoefficient { get; set; }
+        public double DensityCoefficient { get; set; }
+        
         // rideEntity without assigned driver.
         // Send messages to drivers, etc
         Task RegisterRide(RideEntity rideEntity);
-        
+
         // Update status, assigned driver, etc
         Task AssignDriver(Guid rideId, Guid driverId);
 
