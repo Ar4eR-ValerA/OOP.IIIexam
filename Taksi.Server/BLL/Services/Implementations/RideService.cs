@@ -10,8 +10,8 @@ namespace Taksi.Server.BLL.Services.Implementations
 {
     public class RideService : IRideService
     {
-        private IRepository<RideEntity> _rideRepo;
-        private IRepository<DriverEntity> _driverRepo;
+        private readonly IRepository<RideEntity> _rideRepo;
+        private readonly IRepository<DriverEntity> _driverRepo;
 
         public RideService(IRepository<RideEntity> rideRepo, IRepository<DriverEntity> driverRepo)
         {

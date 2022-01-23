@@ -10,8 +10,8 @@ namespace Taksi.Server.BLL.Services.Implementations
 {
     public class ClientService : IClientService
     {
-        private IRepository<ClientEntity> _clientRepository;
-        private IRepository<CreditCardEntity> _creditCardRepository;
+        private readonly IRepository<ClientEntity> _clientRepository;
+        private readonly IRepository<CreditCardEntity> _creditCardRepository;
 
         public ClientService(IRepository<ClientEntity> clientRepo, IRepository<CreditCardEntity> creditCardRepo)
         {
