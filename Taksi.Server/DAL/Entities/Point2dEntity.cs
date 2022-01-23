@@ -21,11 +21,15 @@ namespace Taksi.Server.DAL.Entities
         public virtual Guid Id { get; set; }
         public virtual double X { get; set; }
         public virtual double Y { get; set; }
-
-
-        public virtual Point2d GetDto()
+        
+        public Point2d GetDto()
         {
             return new Point2d(X, Y);
+        }
+
+        public double DistanceTo(Point2dEntity targetPoint)
+        {
+            return Math.Sqrt((X - targetPoint.X) * (X - targetPoint.X) + (Y - targetPoint.Y) * (Y - targetPoint.Y));
         }
     }
 }

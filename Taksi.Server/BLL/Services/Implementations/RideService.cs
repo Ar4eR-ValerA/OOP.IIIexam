@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Taksi.DTO.Enums;
 using Taksi.Server.BLL.Services.Interfaces;
@@ -15,6 +16,13 @@ namespace Taksi.Server.BLL.Services.Implementations
         private readonly IRepository<DriverEntity> _driverRepo;
         private readonly ILogger _logger;
 
+        public double StandardCoefficient { get; set; } = 1;
+        public double ComfortCoefficient { get; set; } = 1.2;
+        public double BusinessCoefficient { get; set; } = 1.5;
+        public double LuxuryCoefficient { get; set; } = 2;
+        public double DensityCoefficient { get; set; } = 1.1;
+
+
         public RideService(IRepository<RideEntity> rideRepo, IRepository<DriverEntity> driverRepo, ILogger logger)
         {
             _rideRepo = rideRepo ?? throw new ArgumentNullException(nameof(rideRepo));
@@ -25,7 +33,40 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task RegisterRide(RideEntity rideEntity)
         {
             _logger.LogInfo($"Ride {rideEntity.Id} registered.");
-            
+
+            double coefficient;
+            switch (rideEntity.TaxiType)
+            {
+                case TaxiType.Standard:
+                    coefficient = StandardCoefficient;
+                    break;
+                case TaxiType.Comfort:
+                    coefficient = ComfortCoefficient;
+                    break;
+                case TaxiType.Business:
+                    coefficient = BusinessCoefficient;
+                    break;
+                case TaxiType.Luxury:
+                    coefficient = LuxuryCoefficient;
+                    break;
+                default:
+                    coefficient = 1;
+                    break;
+            }
+
+            double price = 0;
+            for (int i = 1; i < rideEntity.Path.Count; i++)
+            {
+                price += rideEntity.Path[i - 1].DistanceTo(rideEntity.Path[i]) * coefficient;
+            }
+
+            Point2dEntity startPoint = rideEntity.Path.First();
+            int closeRides = (await _rideRepo.GetAllAsync())
+                .Select(r => startPoint.DistanceTo(r.Path.First()) < 100 && r.Status == RideStatus.Opened)
+                .Count();
+            price *= Math.Pow(DensityCoefficient, closeRides);
+            rideEntity.Price = price;
+
             await _rideRepo.InsertAsync(rideEntity);
         }
 
@@ -60,35 +101,29 @@ namespace Taksi.Server.BLL.Services.Implementations
         public async Task WaitForClient(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.DriverComing)
                 throw new ArgumentException("Only DriverComing -> WaitingClient sequence is correct");
 
             ride.Status = RideStatus.WaitingClient;
-            
-            _logger.LogInfo($"Update ride {rideId} status on WaitingClient.");
-            
-            await _rideRepo.UpdateAsync(ride);
 
-            // TODO: Send messages to clients, if SignalR will work with us of course
+            _logger.LogInfo($"Update ride {rideId} status on WaitingClient.");
+
+            await _rideRepo.UpdateAsync(ride);
         }
 
         public async Task StartRide(Guid rideId)
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.WaitingClient)
                 throw new ArgumentException("Only WaitingClient -> InProcess sequence is correct");
 
             ride.Status = RideStatus.InProcess;
-            
-            _logger.LogInfo($"Update ride {rideId} status on InProcess.");
-            
-            await _rideRepo.UpdateAsync(ride);
 
-            // TODO: Send messages to clients, if SignalR will work with us of course
+            _logger.LogInfo($"Update ride {rideId} status on InProcess.");
+
+            await _rideRepo.UpdateAsync(ride);
         }
 
         public async Task EndRide(Guid rideId)
@@ -108,7 +143,6 @@ namespace Taksi.Server.BLL.Services.Implementations
             await _rideRepo.UpdateAsync(ride);
             await _driverRepo.UpdateAsync(driver);
 
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
 
         public async Task CancelRide(Guid rideId)
@@ -116,11 +150,11 @@ namespace Taksi.Server.BLL.Services.Implementations
             var ride = await _rideRepo.GetByIdAsync(rideId);
             var driver = await _driverRepo.GetByIdAsync(ride.AssignedDriver);
 
-            // TODO: Custom exception class?
             if (ride.Status != RideStatus.DriverComing)
                 throw new ArgumentException("Only DriverComing -> Cancelled sequence is correct");
 
             ride.Status = RideStatus.Cancelled;
+
             driver.Status = DriverStatus.WaitingForClient;
 
 
@@ -129,22 +163,19 @@ namespace Taksi.Server.BLL.Services.Implementations
             await _rideRepo.UpdateAsync(ride);
             await _driverRepo.UpdateAsync(driver);
 
-            // TODO: Send messages to clients, if SignalR will work with us of course
         }
-
-        // TODO: Добавить какой-нить общий метод find, который по куче параметров найдёт все подходящие поездки
 
         public async Task<RideEntity> FindOneRide(Guid rideId)
         {
             _logger.LogInfo($"Find ride {rideId}.");
-            
+
             return await _rideRepo.GetByIdAsync(rideId);
         }
 
         public IEnumerable<RideEntity> GetAllForClient(Guid clientId)
         {
             _logger.LogInfo($"Find all rides for client {clientId}.");
-            
+
             return _rideRepo.GetWhereAsync(ride => ride.AssignedClient == clientId);
         }
     }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Taksi.DTO.DTOs;
+using Taksi.DTO.Enums;
 using Taksi.DTO.Models;
 using Taksi.Server.BLL.Services.Interfaces;
 using Taksi.Server.DAL.Entities;
@@ -25,14 +26,20 @@ namespace Taksi.Server.Controllers
         [HttpPost("create-ride")]
         public async Task<RideDto> CreateRide(
             [FromQuery] Guid clientId,
+            TaxiType taxiType,
             [FromBody] IEnumerable<Point2d> points)
         {
-            var rideEntity = new RideEntity(points.Select(p => new Point2dEntity(p.X, p.Y)).ToList(), clientId);
+            var rideEntity = new RideEntity(
+                points.Select(p => new Point2dEntity(p.X, p.Y)).ToList(),
+                clientId,
+                taxiType);
             await _service.RegisterRide(rideEntity);
 
             return new RideDto(
                 rideEntity.Id,
                 rideEntity.Path.Select(p => p.GetDto()).ToList(),
+                rideEntity.Price,
+                rideEntity.TaxiType,
                 rideEntity.Status,
                 rideEntity.AssignedClient,
                 rideEntity.AssignedDriver);
@@ -41,7 +48,6 @@ namespace Taksi.Server.Controllers
         [HttpGet("get-ride-for-client")]
         public IActionResult FindRidesForClient([FromQuery] Guid clientId)
         {
-            // TODO: Позже думаю можно сделать этот метод просто Find и искать поездки по любым заданным параметрам
             if (clientId != Guid.Empty)
             {
                 var result = _service.GetAllForClient(clientId);
@@ -114,6 +120,36 @@ namespace Taksi.Server.Controllers
             }
 
             return StatusCode((int) HttpStatusCode.BadRequest);
+        }
+        
+        [HttpPatch("change-standard-coefficient")]
+        public void ChangeStandardCoefficient([FromQuery] double newCoefficient)
+        {
+            _service.StandardCoefficient = newCoefficient;
+        }
+        
+        [HttpPatch("change-comfort-coefficient")]
+        public void ChangeComfortCoefficient([FromQuery] double newCoefficient)
+        {
+            _service.ComfortCoefficient = newCoefficient;
+        }
+        
+        [HttpPatch("change-business-coefficient")]
+        public void ChangeBusinessCoefficient([FromQuery] double newCoefficient)
+        {
+            _service.BusinessCoefficient = newCoefficient;
+        }
+        
+        [HttpPatch("change-luxury-coefficient")]
+        public void ChangeLuxuryCoefficient([FromQuery] double newCoefficient)
+        {
+            _service.LuxuryCoefficient = newCoefficient;
+        }
+        
+        [HttpPatch("change-density-coefficient")]
+        public void ChangeDensityCoefficient([FromQuery] double newCoefficient)
+        {
+            _service.DensityCoefficient = newCoefficient;
         }
     }
 }
