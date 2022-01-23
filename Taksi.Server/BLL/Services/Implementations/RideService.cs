@@ -16,6 +16,13 @@ namespace Taksi.Server.BLL.Services.Implementations
         private readonly IRepository<DriverEntity> _driverRepo;
         private readonly ILogger _logger;
 
+        public double StandardCoefficient { get; set; } = 1;
+        public double ComfortCoefficient { get; set; } = 1.2;
+        public double BusinessCoefficient { get; set; } = 1.5;
+        public double LuxuryCoefficient { get; set; } = 2;
+        public double DensityCoefficient { get; set; } = 1.1;
+
+
         public RideService(IRepository<RideEntity> rideRepo, IRepository<DriverEntity> driverRepo, ILogger logger)
         {
             _rideRepo = rideRepo ?? throw new ArgumentNullException(nameof(rideRepo));
@@ -27,18 +34,37 @@ namespace Taksi.Server.BLL.Services.Implementations
         {
             _logger.LogInfo($"Ride {rideEntity.Id} registered.");
 
+            double coefficient;
+            switch (rideEntity.TaxiType)
+            {
+                case TaxiType.Standard:
+                    coefficient = StandardCoefficient;
+                    break;
+                case TaxiType.Comfort:
+                    coefficient = ComfortCoefficient;
+                    break;
+                case TaxiType.Business:
+                    coefficient = BusinessCoefficient;
+                    break;
+                case TaxiType.Luxury:
+                    coefficient = LuxuryCoefficient;
+                    break;
+                default:
+                    coefficient = 1;
+                    break;
+            }
+
             double price = 0;
             for (int i = 1; i < rideEntity.Path.Count; i++)
             {
-                price += rideEntity.Path[i - 1].DistanceTo(rideEntity.Path[i]);
+                price += rideEntity.Path[i - 1].DistanceTo(rideEntity.Path[i]) * coefficient;
             }
 
             Point2dEntity startPoint = rideEntity.Path.First();
             int closeRides = (await _rideRepo.GetAllAsync())
                 .Select(r => startPoint.DistanceTo(r.Path.First()) < 100 && r.Status == RideStatus.Opened)
                 .Count();
-            double densityCoefficient = 1.1;
-            price *= Math.Pow(densityCoefficient, closeRides);
+            price *= Math.Pow(DensityCoefficient, closeRides);
             rideEntity.Price = price;
 
             await _rideRepo.InsertAsync(rideEntity);
