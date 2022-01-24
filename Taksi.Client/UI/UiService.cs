@@ -22,18 +22,22 @@ namespace ITMO.Client.UI
             Command[] commands =
             {
                 new Command("Register client", async () => await _executor.RegisterClient(_client)),
+                new Command("Create ride", async () => await _executor.CreateRide(_client)),
                 new Command("Register credit card", async () => await _executor.RegisterCreditCard(_client)),
                 new Command("Unregister client", async () => await _executor.UnregisterClient(_client)),
                 new Command("Unregister credit card", async () => await _executor.UnregisterCreditCard(_client)),
                 new Command("Check credit card", async () => await _executor.CheckCreditCard(_client)),
                 new Command("Get credit card balance", async () => await _executor.GetCreditCardBalance(_client)),
                 new Command("Set credit card balance", async () => await _executor.SetCreditCardBalance(_client)),
-                new Command("exit"),
+                new Command("Rate driver", async () => await _executor.RateDriver(_client)),
+                new Command("Get driver rating", async () => await _executor.GetDriverRating(_client)),
+                new Command("Get rides for client", async () => await _executor.GetAllRidesForClient(_client)),
+                new Command("Exit"),
             };
 
             Command command = _asker.AskChoices("Enter command", commands);
 
-            while (command.Title != "exit")
+            while (command.Title != "Exit")
             {
                 command.Action();
 

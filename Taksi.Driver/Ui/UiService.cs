@@ -29,12 +29,12 @@ namespace Taksi.Driver.Ui
                 new Command("Start ride", async () => await _executor.StartRide(_client)),
                 new Command("End ride", async () => await _executor.EndRide(_client)),
                 new Command("Cancel ride", async () => await _executor.CancelRide(_client)),
-                new Command("exit"),
+                new Command("Exit"),
             };
 
             Command command = _asker.AskChoices("Enter command", commands);
 
-            while (command.Title != "exit")
+            while (command.Title != "Exit")
             {
                 command.Action();
 

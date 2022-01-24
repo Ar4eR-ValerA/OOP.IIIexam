@@ -45,7 +45,7 @@ namespace Taksi.Server.Controllers
                 rideEntity.AssignedDriver);
         }
 
-        [HttpGet("get-ride-for-client")]
+        [HttpGet("get-rides-for-client")]
         public IActionResult FindRidesForClient([FromQuery] Guid clientId)
         {
             if (clientId != Guid.Empty)
