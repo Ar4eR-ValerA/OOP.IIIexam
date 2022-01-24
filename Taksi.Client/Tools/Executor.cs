@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using ITMO.Client.UI;
 
@@ -7,15 +6,11 @@ namespace ITMO.Client.Tools
 {
     public class Executor
     {
-        private readonly Inputter _inputter;
-        private readonly Asker _asker;
         private readonly Actions _actions;
 
         public Executor()
         {
-            _inputter = new Inputter();
             _actions = new Actions();
-            _asker = new Asker();
         }
 
 

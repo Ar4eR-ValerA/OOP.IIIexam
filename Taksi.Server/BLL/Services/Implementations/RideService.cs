@@ -130,8 +130,7 @@ namespace Taksi.Server.BLL.Services.Implementations
         {
             var ride = await _rideRepo.GetByIdAsync(rideId);
             var driver = await _driverRepo.GetByIdAsync(ride.AssignedDriver);
-
-            // TODO: Custom exception class?
+            
             if (ride.Status != RideStatus.InProcess)
                 throw new ArgumentException("Only InProcess -> Finished sequence is correct");
 

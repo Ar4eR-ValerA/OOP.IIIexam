@@ -20,7 +20,6 @@ namespace Taksi.Server.DAL.Entities
             Status = DriverStatus.WaitingForClient;
             RatingSum = 0;
             CountOfRatings = 0;
-            //TODO: Подумать, что делать с координатами при регистрации водителя.
             Location = new Point2dEntity(0, 0);
         }
 
