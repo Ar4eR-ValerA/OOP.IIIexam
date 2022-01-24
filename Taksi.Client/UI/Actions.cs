@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,17 +85,7 @@ namespace ITMO.Client.UI
 
             AnsiConsole.Write("Done.");
         }
-
-        public async Task GetCreditCardBalance(HttpClient client)
-        {
-            var clientId = _inputter.InputGuid("Client Id:");
-            var response =
-                await client.GetAsync(
-                    $"https://localhost:5001/clients/get-credit-card-balance?clientId={clientId}");
-
-            AnsiConsole.Write("Done.");
-        }
-
+        
         public async Task SetCreditCardBalance(HttpClient client)
         {
             var clientId = _inputter.InputGuid("Client Id:");
@@ -103,16 +94,6 @@ namespace ITMO.Client.UI
                 await client.PutAsync(
                     $"https://localhost:5001/clients/register-credit-card?clientId={clientId}&newBalance={newBalance}",
                     null!);
-
-            AnsiConsole.Write("Done.");
-        }
-
-        public async Task GetDriverRating(HttpClient client)
-        {
-            var driverId = _inputter.InputGuid("Driver Id:");
-            var response =
-                await client.GetAsync(
-                    $"https://localhost:5001/drivers/get-rating?id={driverId}");
 
             AnsiConsole.Write("Done.");
         }
@@ -126,16 +107,6 @@ namespace ITMO.Client.UI
                 await client.PostAsync(
                     $"https://localhost:5001/drivers/rate-driver?id={driverId}&rate{rate.ToString(CultureInfo.InvariantCulture)}",
                     null!);
-
-            AnsiConsole.Write("Done.");
-        }
-
-        public async Task GetAllRides(HttpClient client)
-        {
-            var clientId = _inputter.InputGuid("Client Id:");
-            var response =
-                await client.GetAsync(
-                    $"https://localhost:5001/rides/get-rides-for-client?clientId={clientId}");
 
             AnsiConsole.Write("Done.");
         }

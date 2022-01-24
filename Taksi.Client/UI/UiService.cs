@@ -27,11 +27,8 @@ namespace ITMO.Client.UI
                 new Command("Unregister client", async () => await _executor.UnregisterClient(_client)),
                 new Command("Unregister credit card", async () => await _executor.UnregisterCreditCard(_client)),
                 new Command("Check credit card", async () => await _executor.CheckCreditCard(_client)),
-                new Command("Get credit card balance", async () => await _executor.GetCreditCardBalance(_client)),
                 new Command("Set credit card balance", async () => await _executor.SetCreditCardBalance(_client)),
                 new Command("Rate driver", async () => await _executor.RateDriver(_client)),
-                new Command("Get driver rating", async () => await _executor.GetDriverRating(_client)),
-                new Command("Get rides for client", async () => await _executor.GetAllRidesForClient(_client)),
                 new Command("Exit"),
             };
 

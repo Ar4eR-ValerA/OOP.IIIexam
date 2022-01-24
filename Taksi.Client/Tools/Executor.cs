@@ -39,31 +39,16 @@ namespace ITMO.Client.Tools
             await _actions.CheckCreditCard(client);
         }
         
-        public async Task GetCreditCardBalance(HttpClient client)
-        {
-            await _actions.GetCreditCardBalance(client);
-        }
-
         public async Task SetCreditCardBalance(HttpClient client)
         {
             await _actions.SetCreditCardBalance(client);
-        }
-        
-        public async Task GetDriverRating(HttpClient client)
-        {
-            await _actions.GetDriverRating(client);
         }
         
         public async Task RateDriver(HttpClient client)
         {
             await _actions.RateDriver(client);
         }
-        
-        public async Task GetAllRidesForClient(HttpClient client)
-        {
-            await _actions.GetAllRides(client);
-        }
-        
+
         public async Task CreateRide(HttpClient client)
         {
             await _actions.CreateRide(client);
