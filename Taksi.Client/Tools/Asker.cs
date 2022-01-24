@@ -67,6 +67,20 @@ namespace ITMO.Client.Tools
                         };
                     }));
         }
+        
+        public double AskDouble(string message)
+        {
+            return AnsiConsole.Prompt(
+                new TextPrompt<double>(message + "\n")
+                    .Validate(value =>
+                    {
+                        return value switch
+                        {
+                            < 0 => ValidationResult.Error("[red]Value must be positive[/]"),
+                            _ => ValidationResult.Success(),
+                        };
+                    }));
+        }
 
         public string AskString(string message)
         {

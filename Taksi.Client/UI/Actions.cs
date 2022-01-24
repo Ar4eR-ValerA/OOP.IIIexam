@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using ITMO.Client.Tools;
+using Newtonsoft.Json;
 using Spectre.Console;
 
 namespace ITMO.Client.UI
@@ -48,15 +50,16 @@ namespace ITMO.Client.UI
 
             AnsiConsole.Write("Done.");
         }
-        
+
         public async Task CreateRide(HttpClient client)
         {
             var clientId = _inputter.InputGuid("Client Id:");
             var taxiType = _inputter.InputTaxiType();
+            var points = _inputter.InputPoints();
             var response =
                 await client.PostAsync(
                     $"https://localhost:5001/rides/create-ride?clientId={clientId}&taxiType={taxiType.ToString()}",
-                    null!);
+                    new ByteArrayContent(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(points))));
 
             AnsiConsole.Write("Done.");
         }
@@ -103,7 +106,7 @@ namespace ITMO.Client.UI
 
             AnsiConsole.Write("Done.");
         }
-        
+
         public async Task GetDriverRating(HttpClient client)
         {
             var driverId = _inputter.InputGuid("Driver Id:");
@@ -113,12 +116,12 @@ namespace ITMO.Client.UI
 
             AnsiConsole.Write("Done.");
         }
-        
+
         public async Task RateDriver(HttpClient client)
         {
             var driverId = _inputter.InputGuid("Driver Id:");
-            var rate = _inputter.InputDecimal("Rating: ");
-                
+            var rate = _inputter.InputDouble("Rating: ");
+
             var response =
                 await client.PostAsync(
                     $"https://localhost:5001/drivers/rate-driver?id={driverId}&rate{rate.ToString(CultureInfo.InvariantCulture)}",
@@ -126,7 +129,7 @@ namespace ITMO.Client.UI
 
             AnsiConsole.Write("Done.");
         }
-        
+
         public async Task GetAllRides(HttpClient client)
         {
             var clientId = _inputter.InputGuid("Client Id:");

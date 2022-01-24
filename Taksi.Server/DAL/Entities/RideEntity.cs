@@ -24,7 +24,7 @@ namespace Taksi.Server.DAL.Entities
             AssignedClient = assignedClient;
             Status = RideStatus.Opened;
             TaxiType = taxiType;
-
+            Price = 0;
         }
 
         public virtual Guid Id { get; set; }
