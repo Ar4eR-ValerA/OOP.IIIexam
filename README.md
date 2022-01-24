@@ -6,4 +6,4 @@
 
 DAL сделан асинхронным, и асинхронщина тянется по слоям наверх.
 
-![image](image02.png)
+![image02](https://user-images.githubusercontent.com/75442282/150738584-4f337b7e-fc52-45ec-ad52-6cc211e08892.png)
