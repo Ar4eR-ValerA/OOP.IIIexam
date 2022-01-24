@@ -78,6 +78,11 @@ namespace Taksi.Server.BLL.Services.Implementations
             var driverEntity = await driverTask;
             var rideEntity = await rideTask;
 
+            if (!driverEntity.TaxiType.Equals(rideEntity.TaxiType))
+            {
+                throw new ArgumentException("Taxi type doesn't match");
+            }
+            
             if (driverEntity is null)
             {
                 throw new ArgumentException("There is no such driver");
